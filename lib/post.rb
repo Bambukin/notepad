@@ -22,6 +22,6 @@ class Post
   end
 
   def file_path
-    "#{__dir__}/../posts/#{@created_at.strftime("#{self.class.name}_%Y-%m-%d_%H-%M-%S.txt")}"
+    @created_at.strftime("#{__dir__}/../posts/#{self.class}_%Y-%m-%d_%H-%M-%S.txt")
   end
 end
