@@ -1,7 +1,7 @@
 # Sample Notepad
 
 ___
-It's a sample notepad with console interface, that can store your memos, tasks and links in .txt files.
+It's a sample notepad with console interface, that can create your memos, tasks and links in .txt files.
 
 ### App description:
 To use it you need to save this app `git@github.com:Bambukin/notepad.git`  
