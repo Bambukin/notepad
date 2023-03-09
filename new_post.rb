@@ -15,7 +15,7 @@ until choice >= 0 && choice < choices.size
     puts "\t#{index}. #{type}"
   end
 
-  p choice = $stdin.gets.to_i - 1
+  choice = $stdin.gets.to_i - 1
 end
 
 entry = Post.create(choices[choice])
