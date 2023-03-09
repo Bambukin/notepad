@@ -20,7 +20,12 @@ OptionParser.new do |opt|
 end.parse!
 
 if options[:id].nil?
-  result = Post.find_all(options[:limit], options[:type])
+  begin
+    result = Post.find_all(options[:limit], options[:type])
+  rescue SQLite3::SQLException => e
+    puts "Ошибка, #{e.message}"
+    exit
+  end
   print '| id                 '
   print '| @type              '
   print '| @created_at        '
@@ -40,7 +45,12 @@ if options[:id].nil?
     print '|'
   end
 else
-  result = Post.find_by_id(options[:id])
+  begin
+    result = Post.find_by_id(options[:id])
+  rescue SQLite3::SQLException => e
+    puts "Ошибка, #{e.message}"
+    exit
+  end
   exit if result.nil?
   puts "Запись #{result.class.name}, id = #{options[:id]}"
 
