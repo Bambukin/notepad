@@ -21,19 +21,28 @@ end.parse!
 
 if options[:id].nil?
   result = Post.find_all(options[:limit], options[:type])
-  print "| id\t| @type\t| @created_at\t\t\t| @text\t\t\t| @url\t\t| @due_date\t"
+  print '| id                 '
+  print '| @type              '
+  print '| @created_at        '
+  print '| @text              '
+  print '| @url               '
+  print '| @due_date          '
+  print '|'
 
-  result.each do |row|
+  result&.each do |row|
     puts
     row.each do |element|
-      print "| #{element.to_s.delete('\\n\\r')[0..40]}\t"
+      element_text = "| #{element.to_s.delete("\n")[0..17]}"
+      element_text << ' ' * (21 - element_text.size)
+      print element_text
     end
+
+    print '|'
   end
 else
   result = Post.find_by_id(options[:id])
+  exit if result.nil?
   puts "Запись #{result.class.name}, id = #{options[:id]}"
 
-  result.to_strings.each do |line|
-    puts line
-  end
+  result.to_strings.each { |line| puts line }
 end

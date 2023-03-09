@@ -1,7 +1,7 @@
 require 'sqlite3'
 
 class Post
-  @@SQLITE_DB_FILE = File.join(__dir__, '..', 'notepad.db')
+  SQLITE_DB_FILE = File.join(__dir__, '..', 'notepad.db')
 
   def self.post_types
     { 'Memo' => Memo, 'Task' => Task, 'Link' => Link }
@@ -12,34 +12,28 @@ class Post
   end
 
   def self.find_by_id(id)
-    db = SQLite3::Database.open(@@SQLITE_DB_FILE)
+    db = SQLite3::Database.open(SQLITE_DB_FILE)
     db.results_as_hash = true
-
     result = db.execute('SELECT * FROM posts WHERE rowid = ?', id)
-
-    result = result[0] if result.is_a? Array
-
     db.close
-    if result.nil?
-      puts "Такой id #{id} не найден в базе."
-      nil
-    else
-      post = create(result['type'])
-      post.load_data(result)
-      post
-    end
+
+    return nil if result.empty?
+
+    result = result[0]
+
+    post = create(result['type'])
+    post.load_data(result)
+    post
   end
 
   def self.find_all(limit, type)
-    db = SQLite3::Database.open(@@SQLITE_DB_FILE)
+    db = SQLite3::Database.open(SQLITE_DB_FILE)
 
     db.results_as_hash = false
 
     query = 'SELECT rowid, * FROM posts '
-
     query += 'WHERE type = :type ' unless type.nil?
     query += 'ORDER by rowid DESC '
-
     query += 'LIMIT :limit ' unless limit.nil?
 
     statement = db.prepare(query)
@@ -48,6 +42,7 @@ class Post
     statement.bind_param('limit', limit) unless limit.nil?
 
     result = statement.execute!
+
     statement.close
     db.close
 
@@ -74,7 +69,7 @@ class Post
   end
 
   def save_to_db
-    db = SQLite3::Database.open(@@SQLITE_DB_FILE)
+    db = SQLite3::Database.open(SQLITE_DB_FILE)
     db.results_as_hash = true
 
     db.execute(
