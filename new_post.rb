@@ -23,7 +23,7 @@ entry = Post.create(choices[choice])
 entry.read_from_console
 
 begin
-id = entry.save_to_db
+  id = entry.save_to_db
 rescue SQLite3::SQLException => e
   puts "Ошибка, #{e.message}"
   exit
